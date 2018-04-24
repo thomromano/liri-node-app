@@ -1,11 +1,11 @@
-require("dotenv").config();
+const dotenv = require("dotenv").config();
 
 //store dependencies as variables.
-var keys = require('./keys.js');
-var twitter = require("twitter");
-var spotify = require("spotify");
-var request = require("request");
-var fs = require('fs');
+const keys = require('./keys.js');
+const twitter = require("twitter");
+const spotify = require("node-spotify-api");
+const request = require("request");
+const fs = require('fs');
 
 
 console.log("Type my-tweets , spotify-this-song , movie-this , or do-what-it-says to get started!");
@@ -43,11 +43,12 @@ function theSwitch() {
 function fetchTweets() {
 	console.log("Here are your tweets");
 
-	var client = new twitter({
-		consumer_key: keys.twitterKeys.consumer_key,
-		consumer_secret: keys.twitterKeys.consumer_secret,
-		access_token_key: keys.twitterKeys.access_token_key,
-		access_token_secret: keys.twitterKeys.access_token_secret
+	const client = new twitter({
+		consumer_key: process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+
 	});
 
 
@@ -70,6 +71,11 @@ function fetchTweets() {
 function spotifyMe() {
 	console.log("Search music");
 
+	exports.spotify = {
+		id: process.env.SPOTIFY_ID,
+		secret: process.env.SPOTIFY_SECRET
+	  };
+	  
 
 
 	var searchTrack;
@@ -96,7 +102,9 @@ function spotifyMe() {
 	});
 };
 
-function movieSearch() {
+const movieSearch = function(movie) {
+	
+}
 	console.log("Search movies");
 
 
@@ -118,10 +126,10 @@ function movieSearch() {
 			console.log("Plot: " + JSON.parse(body)["Plot"]);
 			console.log("Actors: " + JSON.parse(body)["Actors"]);
 			console.log("Rotten Tomatoes Rating: " + JSON.parse(body)["tomatoRating"]);
-			console.log("Rotten Tomatoes URL: " + JSON.parse(body)["tomatoURL"]);
+			
 		}
 	});
-};
+
 
 function followRules() {
 	console.log("Looking at random.txt now");
